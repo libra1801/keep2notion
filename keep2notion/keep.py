@@ -4,7 +4,7 @@ import json
 import os
 from dotenv import load_dotenv
 import pendulum
-from keep2notion.notion_helper import NotionHelper
+from notion_helper import NotionHelper
 import requests
 import utils
 from config import workout_properties_type_dict
