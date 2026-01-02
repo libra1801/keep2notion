@@ -253,7 +253,7 @@ def get_run_data(log,equipment_dict):
             type_name = "骑行"
         if type_name:
             workout["运动类型"].append(notion_helper.get_relation_id(
-                type_name, id=notion_helper.type_database_id, icon=log.get("icon")))
+                type_name, id=notion_helper.type_database_id, datasource_id=notion_helper.type_datasource_id, icon=log.get("icon")))
         heartRate = data.get("heartRate")
         if heartRate:
             workout["平均心率"] = heartRate.get("averageHeartRate")
