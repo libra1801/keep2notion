@@ -51,7 +51,7 @@ jobs:
           echo "Renamed file to $RANDOM_FILENAME"
       - name: udpate heatmap 
         run: |
-            update_heatmap
+            python keep2notion/update_heatmap.py
       - name: push
         run: |
           git config --local user.email "action@github.com"
