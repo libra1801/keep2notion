@@ -193,12 +193,12 @@ class NotionHelper:
         )
 
     @retry(stop_max_attempt_number=3, wait_fixed=5000)
-    def get_relation_id(self, name, id, icon, properties={}):
+    def get_relation_id(self, name, id, datasource_id, icon, properties={}):
         key = f"{id}{name}"
         if key in self.__cache:
             return self.__cache.get(key)
         filter = {"property": "标题", "title": {"equals": name}}
-        response = self.client.data_sources.query(data_source_id=id, filter=filter)
+        response = self.client.data_sources.query(data_source_id=datasource_id, filter=filter)
         if len(response.get("results")) == 0:
             parent = {"database_id": id, "type": "database_id"}
             properties["标题"] = get_title(name)
