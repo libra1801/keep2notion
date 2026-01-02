@@ -301,7 +301,7 @@ def main():
     equipments = get_equipment()
     equipment_dict= {}
     if equipments:
-        equipment_dict = insert_equipment_to_notion(equipments,notion_helper.equipment_database_id, equipments,notion_helper.equipment_datasource_id)
+        equipment_dict = insert_equipment_to_notion(equipments,notion_helper.equipment_database_id, notion_helper.equipment_datasource_id)
     logs = get_run_id()
     if logs:
         # 按照结束时间倒序排序
