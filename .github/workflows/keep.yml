@@ -34,7 +34,7 @@ jobs:
           pip install -r requirements.txt
       - name: keep  sync
         run: |
-          keep2notion
+          python keep2notion/keep.py
       - name: Set default year if not provided
         run: echo "YEAR=$(date +"%Y")" >> $GITHUB_ENV
         if: env.YEAR == ''
