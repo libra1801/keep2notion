@@ -29,7 +29,7 @@ def run_command(command):
 
 def main():
     update_heatmap("OUT_FOLDER",notion_helper.heatmap_block_id)
-    types = notion_helper.query_all(notion_helper.type_database_id)
+    types = notion_helper.query_all(notion_helper.type_datasource_id)
     for type in types:
         page_id = type.get("id")
         notion_token = os.getenv("NOTION_TOKEN")
