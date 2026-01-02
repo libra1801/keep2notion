@@ -6,8 +6,8 @@ from dotenv import load_dotenv
 import pendulum
 from keep2notion.notion_helper import NotionHelper
 import requests
-from keep2notion import utils
-from keep2notion.config import workout_properties_type_dict
+import utils
+from config import workout_properties_type_dict
 
 LOGIN_API = "https://api.gotokeep.com/v1.1/users/login"
 DATA_API = "https://api.gotokeep.com/pd/v3/stats/detail?dateUnit=all&type=all&lastDate={last_date}"
