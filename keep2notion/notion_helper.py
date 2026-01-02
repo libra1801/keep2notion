@@ -105,9 +105,9 @@ class NotionHelper:
 
             if child["type"] == "child_database":
                 childdb = self.client.databases.retrieve(database_id=child.get("id"))
-                print(childdb)
-                self.database_id_dict[child.get("child_database").get("title")] = (
-                    child.get("id")
+                childds0 = childdb.get("data_sources")[0]
+                self.database_id_dict[childds0.get("name")] = (
+                    childds0.get("id")
                 )
             elif child["type"] == "embed" and child.get("embed").get("url"):
                 if child.get("embed").get("url").startswith("https://heatmap.malinkang.com/"):
