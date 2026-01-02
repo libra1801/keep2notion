@@ -5,7 +5,7 @@ import hashlib
 import os
 import requests
 import base64
-from keep2notion.config import (
+from config import (
     RICH_TEXT,
     URL,
     RELATION,
