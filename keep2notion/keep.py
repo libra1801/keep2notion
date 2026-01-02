@@ -108,6 +108,7 @@ def insert_weight_data_to_notion(weight_data):
         datasource_id=notion_helper.weight_datasource_id)
     for item in notion_weights:
         if item.get("properties").get("id"):
+            print(item.get("properties").get("id"))
             existing_ids.add(item.get("properties").get(
                 "id").get("rich_text")[0].get("plain_text"))
 
