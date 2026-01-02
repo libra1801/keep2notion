@@ -104,7 +104,8 @@ class NotionHelper:
             # 检查子块的类型
 
             if child["type"] == "child_database":
-                print(child)
+                childdb = self.client.databases.retrieve(database_id=child.get("id"))
+                print(childdb)
                 self.database_id_dict[child.get("child_database").get("title")] = (
                     child.get("id")
                 )
