@@ -242,7 +242,7 @@ def get_run_data(log,equipment_dict):
         workout["消耗热量"] = data.get("calorie")
         workout["运动类型"] = [
             notion_helper.get_relation_id(
-                log.get("name"), id=notion_helper.type_database_id, icon=log.get("icon"))
+                log.get("name"), id=notion_helper.type_database_id, datasource_id=notion_helper.type_datasource_id, icon=log.get("icon"))
         ]
         type_name = None
         if (log.get("type") == "running"):
