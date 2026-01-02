@@ -41,6 +41,7 @@ class NotionHelper:
         "EQUIPMENT_DATABASE_NAME": "我的装备",
     }
     database_id_dict = {}
+    datasource_id_dict = {}
     image_dict = {}
 
     def __init__(self):
@@ -54,30 +55,57 @@ class NotionHelper:
         self.workout_database_id = self.database_id_dict.get(
             self.database_name_dict.get("WORKOUT_DATABASE_NAME")
         )
+        self.workout_datasource_id = self.datasource_id_dict.get(
+            self.database_name_dict.get("WORKOUT_DATABASE_NAME")
+        )
         self.day_database_id = self.database_id_dict.get(
+            self.database_name_dict.get("DAY_DATABASE_NAME")
+        )
+        self.day_datasource_id = self.datasource_id_dict.get(
             self.database_name_dict.get("DAY_DATABASE_NAME")
         )
         self.week_database_id = self.database_id_dict.get(
             self.database_name_dict.get("WEEK_DATABASE_NAME")
         )
+        self.week_datasource_id = self.datasource_id_dict.get(
+            self.database_name_dict.get("WEEK_DATABASE_NAME")
+        )
         self.month_database_id = self.database_id_dict.get(
+            self.database_name_dict.get("MONTH_DATABASE_NAME")
+        )
+        self.month_datasource_id = self.datasource_id_dict.get(
             self.database_name_dict.get("MONTH_DATABASE_NAME")
         )
         self.year_database_id = self.database_id_dict.get(
             self.database_name_dict.get("YEAR_DATABASE_NAME")
         )
+        self.year_datasource_id = self.datasource_id_dict.get(
+            self.database_name_dict.get("YEAR_DATABASE_NAME")
+        )
         self.all_database_id = self.database_id_dict.get(
             self.database_name_dict.get("ALL_DATABASE_NAME")
-        )        
+        )
+        self.all_datasource_id = self.datasource_id_dict.get(
+            self.database_name_dict.get("ALL_DATABASE_NAME")
+        )
         self.type_database_id = self.database_id_dict.get(
             self.database_name_dict.get("TYPE_DATABASE_NAME")
-        )        
+        )
+        self.type_datasource_id = self.datasource_id_dict.get(
+            self.database_name_dict.get("TYPE_DATABASE_NAME")
+        )
         self.weight_database_id = self.database_id_dict.get(
             self.database_name_dict.get("WEIGHT_DATABASE_NAME")
-        )     
+        )
+        self.weight_datasource_id = self.datasource_id_dict.get(
+            self.database_name_dict.get("WEIGHT_DATABASE_NAME")
+        )
         self.equipment_database_id = self.database_id_dict.get(
             self.database_name_dict.get("EQUIPMENT_DATABASE_NAME")
-        )      
+        ) 
+        self.equipment_datasource_id = self.datasource_id_dict.get(
+            self.database_name_dict.get("EQUIPMENT_DATABASE_NAME")
+        )
         if self.day_database_id:
             self.write_database_id(self.day_database_id)
 
@@ -107,8 +135,11 @@ class NotionHelper:
                 childdb = self.client.databases.retrieve(database_id=child.get("id"))
                 print(childdb)
                 childds0 = childdb.get("data_sources")[0]
-                self.database_id_dict[childds0.get("name")] = (
+                self.datasource_id_dict[childds0.get("name")] = (
                     childds0.get("id")
+                )
+                self.database_id_dict[child.get("child_database").get("title")] = (
+                    child.get("id")
                 )
             elif child["type"] == "embed" and child.get("embed").get("url"):
                 if child.get("embed").get("url").startswith("https://heatmap.malinkang.com/"):
@@ -117,6 +148,7 @@ class NotionHelper:
             if "has_children" in child and child["has_children"]:
                 self.search_database(child["id"])
         print(self.database_id_dict)
+        print(self.datasource_id_dict)
 
     @retry(stop_max_attempt_number=3, wait_fixed=5000)
     def update_heatmap(self, block_id, url):
@@ -130,7 +162,7 @@ class NotionHelper:
         start, end = get_first_and_last_day_of_week(date)
         properties = {"日期": get_date(format_date(start), format_date(end))}
         return self.get_relation_id(
-            week, self.week_database_id, self.get_date_icon(date, "week"), properties
+            week, self.week_datasource_id, self.get_date_icon(date, "week"), properties
         )
 
     def get_month_relation_id(self, date):
@@ -140,7 +172,7 @@ class NotionHelper:
             "日期": get_date(format_date(start), format_date(end)),
         }
         return self.get_relation_id(
-            month, self.month_database_id, self.get_date_icon(date, "month"), properties
+            month, self.month_datasource_id, self.get_date_icon(date, "month"), properties
         )
 
     def get_year_relation_id(self, date):
@@ -148,7 +180,7 @@ class NotionHelper:
         start, end = get_first_and_last_day_of_year(date)
         properties = {"日期": get_date(format_date(start), format_date(end))}
         return self.get_relation_id(
-            year, self.year_database_id, self.get_date_icon(date, "year"), properties
+            year, self.year_datasource_id, self.get_date_icon(date, "year"), properties
         )
 
 
@@ -157,7 +189,7 @@ class NotionHelper:
         day = new_date.strftime("%Y年%m月%d日")
         properties["日期"] = get_date(format_date(date))
         return self.get_relation_id(
-            day, self.day_database_id, self.get_date_icon(date, "day"), properties
+            day, self.day_datasource_id, self.get_date_icon(date, "day"), properties
         )
 
     @retry(stop_max_attempt_number=3, wait_fixed=5000)
@@ -227,13 +259,13 @@ class NotionHelper:
         return self.client.blocks.delete(block_id=block_id)
 
     @retry(stop_max_attempt_number=3, wait_fixed=5000)
-    def query_all_by_book(self, database_id, filter):
+    def query_all_by_book(self, datasource_id, filter):
         results = []
         has_more = True
         start_cursor = None
         while has_more:
             response = self.client.data_sources.query(
-                data_source_id=database_id,
+                data_source_id=datasource_id,
                 filter=filter,
                 start_cursor=start_cursor,
                 page_size=100,
@@ -244,14 +276,14 @@ class NotionHelper:
         return results
 
     @retry(stop_max_attempt_number=3, wait_fixed=5000)
-    def query_all(self, database_id):
+    def query_all(self, datasource_id):
         """获取database中所有的数据"""
         results = []
         has_more = True
         start_cursor = None
         while has_more:
             response = self.client.data_sources.query(
-                data_source_id=database_id,
+                data_source_id=datasource_id,
                 start_cursor=start_cursor,
                 page_size=100,
             )
@@ -286,7 +318,7 @@ class NotionHelper:
         )
         properties["全部"] = get_relation(
             [
-                self.get_relation_id("全部",self.all_database_id,TARGET_ICON_URL),
+                self.get_relation_id("全部",self.all_datasource_id,TARGET_ICON_URL),
             ]
         )
     def search_heatmap(self, block_id):
