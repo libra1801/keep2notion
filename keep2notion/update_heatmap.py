@@ -3,10 +3,10 @@ import os
 import shutil
 import subprocess
 import uuid
-from keep2notion.utils import (
+from utils import (
     get_property_value
 )
-from keep2notion.notion_helper import NotionHelper
+from notion_helper import NotionHelper
 def get_file(dir):
     dir =f"./{dir}"
     if os.path.exists(dir) and os.path.isdir(dir):
