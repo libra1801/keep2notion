@@ -162,7 +162,7 @@ class NotionHelper:
         start, end = get_first_and_last_day_of_week(date)
         properties = {"日期": get_date(format_date(start), format_date(end))}
         return self.get_relation_id(
-            week, self.week_datasource_id, self.get_date_icon(date, "week"), properties
+            week, self.week_database_id, self.week_datasource_id, self.get_date_icon(date, "week"), properties
         )
 
     def get_month_relation_id(self, date):
@@ -172,7 +172,7 @@ class NotionHelper:
             "日期": get_date(format_date(start), format_date(end)),
         }
         return self.get_relation_id(
-            month, self.month_datasource_id, self.get_date_icon(date, "month"), properties
+            month, self.month_database_id, self.month_datasource_id, self.get_date_icon(date, "month"), properties
         )
 
     def get_year_relation_id(self, date):
@@ -180,7 +180,7 @@ class NotionHelper:
         start, end = get_first_and_last_day_of_year(date)
         properties = {"日期": get_date(format_date(start), format_date(end))}
         return self.get_relation_id(
-            year, self.year_datasource_id, self.get_date_icon(date, "year"), properties
+            year, self.year_database_id, self.year_datasource_id, self.get_date_icon(date, "year"), properties
         )
 
 
@@ -189,7 +189,7 @@ class NotionHelper:
         day = new_date.strftime("%Y年%m月%d日")
         properties["日期"] = get_date(format_date(date))
         return self.get_relation_id(
-            day, self.day_datasource_id, self.get_date_icon(date, "day"), properties
+            day, self.day_database_id, self.day_datasource_id, self.get_date_icon(date, "day"), properties
         )
 
     @retry(stop_max_attempt_number=3, wait_fixed=5000)
@@ -318,7 +318,7 @@ class NotionHelper:
         )
         properties["全部"] = get_relation(
             [
-                self.get_relation_id("全部",self.all_datasource_id,TARGET_ICON_URL),
+                self.get_relation_id("全部",self.all_database_id, self.all_datasource_id,TARGET_ICON_URL),
             ]
         )
     def search_heatmap(self, block_id):
