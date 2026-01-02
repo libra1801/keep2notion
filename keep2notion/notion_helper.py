@@ -105,6 +105,7 @@ class NotionHelper:
 
             if child["type"] == "child_database":
                 childdb = self.client.databases.retrieve(database_id=child.get("id"))
+                print(childb)
                 childds0 = childdb.get("data_sources")[0]
                 self.database_id_dict[childds0.get("name")] = (
                     childds0.get("id")
