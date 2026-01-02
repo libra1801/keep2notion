@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="keep2notion",
+    name="keep2notion-lqer",
     version="0.1.3",
     packages=find_packages(),
     install_requires=[
@@ -20,12 +20,12 @@ setup(
             "update_heatmap = keep2notion.update_heatmap:main",
         ],
     },
-    author="malinkang",
-    author_email="linkang.ma@gmail.com",
+    author="libra1801",
+    author_email="libra1801@github.com",
     description="Keep同步到Notion",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
-    url="https://github.com/malinkang/habit2notion",
+    url="https://github.com/libra1801/keep2notion",
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
