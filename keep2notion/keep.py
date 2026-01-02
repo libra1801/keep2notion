@@ -108,7 +108,6 @@ def insert_weight_data_to_notion(weight_data):
         datasource_id=notion_helper.weight_datasource_id)
     for item in notion_weights:
         if item.get("properties").get("id"):
-            print(item.get("properties").get("id"))
             existing_ids.add(item.get("properties").get(
                 "id").get("rich_text")[0].get("plain_text"))
 
@@ -147,11 +146,11 @@ equipment_dict = {
     "bicycle":"自行车",
 }
 
-def insert_equipment_to_notion(equipments, database_id):
+def insert_equipment_to_notion(equipments, database_id, datasource_id):
     # 获取 Notion 数据库中的所有数据
     existing_ids = dict()
     notion_shoes = notion_helper.query_all(
-        datasource_id=database_id)
+        datasource_id=datasource_id)
     for item in notion_shoes:
         if item.get("properties").get("id"):
             page_id = item.get("id")
@@ -302,7 +301,7 @@ def main():
     equipments = get_equipment()
     equipment_dict= {}
     if equipments:
-        equipment_dict = insert_equipment_to_notion(equipments,notion_helper.equipment_database_id)
+        equipment_dict = insert_equipment_to_notion(equipments,notion_helper.equipment_database_id, equipments,notion_helper.equipment_datasource_id)
     logs = get_run_id()
     if logs:
         # 按照结束时间倒序排序
