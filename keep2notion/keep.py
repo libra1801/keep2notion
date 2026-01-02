@@ -105,7 +105,7 @@ def insert_weight_data_to_notion(weight_data):
     # 获取 Notion 数据库中的所有数据
     existing_ids = set()
     notion_weights = notion_helper.query_all(
-        database_id=notion_helper.weight_database_id)
+        datasource_id=notion_helper.weight_datasource_id)
     for item in notion_weights:
         if item.get("properties").get("id"):
             existing_ids.add(item.get("properties").get(
@@ -150,7 +150,7 @@ def insert_equipment_to_notion(equipments, database_id):
     # 获取 Notion 数据库中的所有数据
     existing_ids = dict()
     notion_shoes = notion_helper.query_all(
-        database_id=database_id)
+        datasource_id=database_id)
     for item in notion_shoes:
         if item.get("properties").get("id"):
             page_id = item.get("id")
@@ -212,7 +212,7 @@ def get_run_id():
 def get_lastest():
     s = set()
     notion_workouts = notion_helper.query_all(
-        database_id=notion_helper.workout_database_id
+        datasource_id=notion_helper.workout_datasource_id
     )
     for i in notion_workouts:
         if i.get("properties").get("Id"):
