@@ -228,6 +228,7 @@ def get_run_id():
         print(f"last date = {last_date}")
         if not last_date:
             break
+    print(results)
     return results
 
 
