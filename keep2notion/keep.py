@@ -13,7 +13,6 @@ LOGIN_API = "https://api.gotokeep.com/v1.1/users/login"
 DATA_API = "https://api.gotokeep.com/pd/v3/stats/detail?dateUnit=all&type=all&lastDate={last_date}"
 LOG_API = "https://api.gotokeep.com/pd/v3/{type}log/{id}"
 WEIGHT = "https://api.gotokeep.com/feynman/v3/data-center/sub/body-data/detail?indicatorType=WEIGHT&pageSize=10"
-STEPS = "https://api.gotokeep.com/feynman/v3/data-center/sub/steps_dashboard/detail?pageSize=10"
 
 keep_headers = {
     "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:78.0) Gecko/20100101 Firefox/78.0",
@@ -98,30 +97,6 @@ def get_weight_data():
             print("获取数据失败:", response.text)
             break
     return results
-
-def get_steps_data():
-    results = []
-    next_page_token = None
-    while True:
-        url = STEPS
-        if next_page_token:
-            url += f"&nextPageToken={next_page_token}"
-        response = requests.get(url, headers=keep_headers)
-        if response.ok:
-            data = response.json().get("data", {})
-            results.extend(data.get("list", []))
-            if not data.get("hasNextPage"):
-                break
-            next_page_token = data.get("nextPageToken")
-        else:
-            print("获取数据失败:", response.text)
-            break
-    print(results)
-    return results
-
-
-
-
 
 def insert_weight_data_to_notion(weight_data):
     # 获取 Notion 数据库中的所有数据
@@ -318,7 +293,6 @@ def main():
     s = get_lastest()
     token = login()
     keep_headers["Authorization"] = f"Bearer {token}"
-    get_steps_data()
     weight_data = get_weight_data()
     if weight_data:
         insert_weight_data_to_notion(weight_data)
