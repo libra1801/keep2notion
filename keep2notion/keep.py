@@ -42,7 +42,6 @@ def login():
     countryCode = os.getenv("COUNTRY_CODE","86")
     mobile = os.getenv("KEEP_MOBILE")
     password = os.getenv("KEEP_PASSWORD")
-    print(password)
     data = {"mobile": mobile, "password": password,"countryCode":countryCode}
     r = requests.post(LOGIN_API, headers=keep_headers, data=data)
     if r.ok:
