@@ -322,7 +322,7 @@ def main():
         equipment_dict = insert_equipment_to_notion(equipments,notion_helper.equipment_database_id, notion_helper.equipment_datasource_id)
     logs, steps = get_run_id()
     print(steps)
-    update_steps_data_to_notion(steps):
+    update_steps_data_to_notion(steps)
     if logs:
         # 按照结束时间倒序排序
         logs = sorted(logs, key=lambda x: x["endTime"])
