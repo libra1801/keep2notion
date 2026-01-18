@@ -223,8 +223,10 @@ def get_run_id():
 
 def update_steps_data_to_notion(steps_data):
     filter = {"property": "时间", "date": {"past_month":{}}}
-    notion_steps = notion_helper.query_all_by_book(
-        datasource_id=notion_helper.weight_datasource_id, filter=filter)
+    #notion_steps = notion_helper.query_all_by_book(
+    #    datasource_id=notion_helper.weight_datasource_id, filter=filter)
+    notion_steps = notion_helper.query_all(
+        datasource_id=notion_helper.weight_datasource_id)
     pages = []
     for item in notion_steps:
         pages.append({"id":item.get("id"), "steps_id":item.get("properties").get("Steps").get("id"), "date": item.get("properties").get("时间").get("date").get("start")})
