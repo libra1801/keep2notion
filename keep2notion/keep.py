@@ -201,7 +201,7 @@ def get_date_from_str(last_datetime, date_str):
 def get_run_id():
     last_date = 0
     stats = []
-    steps = []
+    steps = {}
     last_datetime = pendulum.today()
     while 1:
         print(f"last date = {last_datetime}")
@@ -215,13 +215,15 @@ def get_run_id():
                     if log.get("type") == "stats":
                         stats.append(log.get("stats"))
                     if log.get("type") == "steps":
-                        steps.append({"date":get_date_from_str(last_datetime, record.get("date")), "steps": log.get("steps").get("steps")})
+                        steps[get_date_from_str(last_datetime, record.get("date"))] = log.get("steps").get("steps")
         last_datetime = pendulum.from_timestamp(last_date / 1000, tz='Asia/Shanghai')
         if not last_date:
             break
     return stats, steps
 
-
+def update_steps_data_to_notion(steps_data):
+    None
+    
 def get_lastest():
     s = set()
     notion_workouts = notion_helper.query_all(
@@ -317,6 +319,7 @@ def main():
         equipment_dict = insert_equipment_to_notion(equipments,notion_helper.equipment_database_id, notion_helper.equipment_datasource_id)
     logs, steps = get_run_id()
     print(steps)
+    update_steps_data_to_notion(steps):
     if logs:
         # 按照结束时间倒序排序
         logs = sorted(logs, key=lambda x: x["endTime"])
