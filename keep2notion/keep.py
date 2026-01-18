@@ -225,7 +225,9 @@ def update_steps_data_to_notion(steps_data):
     filter = {"property": "时间", "date": {"past_month":{}}}
     notion_steps = notion_helper.query_all_by_book(
         datasource_id=notion_helper.weight_datasource_id, filter=filter)
-    print(notion_steps)
+    for item in notion_steps:
+        print(item.get("id"))
+        print(item.get("properties").get("时间"))
     
 def get_lastest():
     s = set()
