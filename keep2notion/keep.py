@@ -240,7 +240,7 @@ def update_steps_data_to_notion(steps_data):
             print(page.get("date"))
             print(properties)
             notion_helper.client.pages.update_page(
-                page_id=page.get("id),
+                page_id=page.get("id"),
                 properties=properties
             ) 
     
