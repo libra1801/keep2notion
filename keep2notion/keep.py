@@ -8,6 +8,7 @@ from notion_helper import NotionHelper
 import requests
 import utils
 from config import workout_properties_type_dict
+import re
 
 LOGIN_API = "https://api.gotokeep.com/v1.1/users/login"
 DATA_API = "https://api.gotokeep.com/pd/v3/stats/detail?dateUnit=all&type=all&lastDate={last_date}"
@@ -186,11 +187,24 @@ def insert_equipment_to_notion(equipments, database_id, datasource_id):
             existing_ids[result.get("id")] = entry_id
     return existing_ids
 
+def get_date_from_str(last_datetime, date_str):
+    pattern = '(\d+)月(\d+)日'
+    numbers = re.findall(pattern, date_str)
+    month = int(numbers[0][0], 10)
+    day = int(numbers[0][1], 10)
+    date = pendulum.datetime(last_datetime.year, month, day, tz='Asia/Shanghai')
+    if( date > last_datetime ):
+        date.add(years=-1)
+    #print(date)
+    return date
 
 def get_run_id():
     last_date = 0
-    results = []
+    stats = []
+    steps = []
+    last_datetime = pendulum.today()
     while 1:
+        print(f"last date = {last_datetime}")
         r = requests.get(DATA_API.format(
             last_date=last_date), headers=keep_headers)
         if r.ok:
@@ -199,12 +213,13 @@ def get_run_id():
             for record in records:
                 for log in record.get("logs"):
                     if log.get("type") == "stats":
-                        results.append(log.get("stats"))
-        print(f"last date = {last_date}")
+                        stats.append(log.get("stats"))
+                    if log.get("type") == "steps":
+                        steps.append({"date":get_date_from_str(last_datetime, record.get("date")), "steps": log.get("steps").get("steps")})
+        last_datetime = pendulum.from_timestamp(last_date / 1000, tz='Asia/Shanghai')
         if not last_date:
             break
-    print(results)
-    return results
+    return stats, steps
 
 
 def get_lastest():
@@ -300,7 +315,8 @@ def main():
     equipment_dict= {}
     if equipments:
         equipment_dict = insert_equipment_to_notion(equipments,notion_helper.equipment_database_id, notion_helper.equipment_datasource_id)
-    logs = get_run_id()
+    logs, steps = get_run_id()
+    print(steps)
     if logs:
         # 按照结束时间倒序排序
         logs = sorted(logs, key=lambda x: x["endTime"])
