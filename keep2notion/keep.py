@@ -196,7 +196,7 @@ def get_date_from_str(last_datetime, date_str):
     if( date > last_datetime ):
         date.add(years=-1)
     #print(date)
-    return date
+    return date.format('YYYY-MM-DD')
 
 def get_run_id():
     last_date = 0
@@ -225,9 +225,24 @@ def update_steps_data_to_notion(steps_data):
     filter = {"property": "时间", "date": {"past_month":{}}}
     notion_steps = notion_helper.query_all_by_book(
         datasource_id=notion_helper.weight_datasource_id, filter=filter)
+    pages = []
     for item in notion_steps:
-        print(item.get("id"))
-        print(item.get("properties").get("时间"))
+        pages.append({"id":item.get("id"), "steps_id":item.get("properties").get("Steps").get("id"), "date": item.get("properties").get("时间").get("date").get("start")})
+    print(pages)
+    for page in pages:
+        if page.get("date") in steps_data:
+            properties = {
+                "Steps": {
+                    "id": page.get("steps_id"),
+                    "number": steps_data[page.get("date")]
+                }
+            }
+            print(page.get("date"))
+            print(properties)
+            notion_helper.client.pages.update_page(
+                page_id=page.get("id),
+                properties=properties
+            ) 
     
 def get_lastest():
     s = set()
