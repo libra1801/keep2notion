@@ -133,7 +133,7 @@ class NotionHelper:
 
             if child["type"] == "child_database":
                 childdb = self.client.databases.retrieve(database_id=child.get("id"))
-                print(childdb)
+                #print(childdb)
                 childds0 = childdb.get("data_sources")[0]
                 self.datasource_id_dict[childds0.get("name")] = (
                     childds0.get("id")
@@ -147,8 +147,8 @@ class NotionHelper:
             # 如果子块有子块，递归调用函数
             if "has_children" in child and child["has_children"]:
                 self.search_database(child["id"])
-        print(self.database_id_dict)
-        print(self.datasource_id_dict)
+        #print(self.database_id_dict)
+        #print(self.datasource_id_dict)
 
     @retry(stop_max_attempt_number=3, wait_fixed=5000)
     def update_heatmap(self, block_id, url):
