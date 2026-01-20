@@ -239,8 +239,8 @@ def update_steps_data_to_notion(steps_data):
                     "number": steps_data[page.get("date")]
                 }
             }
-            print(page.get("date"))
-            print(properties)
+            #print(page.get("date"))
+            #print(properties)
             notion_helper.client.pages.update(
                 page_id=page.get("id"),
                 properties=properties
@@ -264,6 +264,7 @@ def get_run_data(log,equipment_dict):
         LOG_API.format(type=log.get("type"), id=log.get("id")), headers=keep_headers
     )
     if r.ok:
+        print(r.json())
         data = r.json().get("data")
         workout = {}
         end_time = pendulum.from_timestamp(
@@ -340,7 +341,7 @@ def main():
     if equipments:
         equipment_dict = insert_equipment_to_notion(equipments,notion_helper.equipment_database_id, notion_helper.equipment_datasource_id)
     logs, steps = get_run_id()
-    print(steps)
+    #print(steps)
     update_steps_data_to_notion(steps)
     if logs:
         # 按照结束时间倒序排序
